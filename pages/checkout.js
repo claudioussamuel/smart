@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { ProductsContext } from "../components/productsContext";
 import { sendContactForm } from "../lib/api";
+import { SnackbarProvider,enqueueSnackbar } from "notistack";
 
 
 export default function CheckoutPage(){
@@ -15,7 +16,12 @@ export default function CheckoutPage(){
 
 
     const onSubmit = async () => {
-        await sendContactForm({productInfos,name,phone,email,city,address,total});
+        await sendContactForm({productInfos,name,phone,email,city,address,total}).then(
+            enqueueSnackbar('Order has been successfully booked. We will contact you soon', { 
+                persist: true 
+              })
+        );
+
     }
 
 
@@ -109,8 +115,9 @@ export default function CheckoutPage(){
             </div>
            
            </div>
-
+            <SnackbarProvider maxSnack={4}/>
             <button onClick={onSubmit} className="bg-emerald-500 px py-2  rounded-xl font-bold text-white w-full">Pay GH₵{total}</button>
+            
         </Layout>
     );
     
